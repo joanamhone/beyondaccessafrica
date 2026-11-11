@@ -1,4 +1,4 @@
-import { AppProvider, useApp } from '@/lib/app-context';
+import { AppProvider } from '@/lib/app-context';
 import { useRouter, type Route } from '@/lib/router';
 import { useTranslation } from '@/lib/i18n';
 import { Sidebar, MobileTopBar, useSidebarState } from '@/components/Sidebar';
@@ -137,16 +137,17 @@ function Footer() {
 function AppShell() {
   const route = useRouter();
   const { mobileOpen, openMobile, closeMobile } = useSidebarState();
-  const { pageLoading } = useApp();
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: 'var(--bg-base)' }}>
       <Sidebar route={route} mobileOpen={mobileOpen} onCloseMobile={closeMobile} />
       <div className="md:pl-64">
         <MobileTopBar onOpenSidebar={openMobile} />
-        <main className="min-h-[calc(100vh-0px)]">
-          <PageView route={route} />
-          {!pageLoading && <Footer />}
+        <main className="min-h-screen flex flex-col">
+          <div className="flex-1">
+            <PageView route={route} />
+          </div>
+          <Footer />
         </main>
       </div>
     </div>

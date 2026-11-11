@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ShieldCheck, Rocket, ArrowRight, Users, BookOpen, AlertTriangle, Sparkles } from 'lucide-react';
-import { fetchFeaturedGuides, fetchGuideCount } from '@/lib/api';
+import { fetchFeaturedGuides } from '@/lib/api';
 import type { Guide } from '@/lib/supabase';
 import { useTranslation } from '@/lib/i18n';
 import { navigate } from '@/lib/router';
@@ -21,7 +21,6 @@ export function HomePage() {
   const { t } = useTranslation();
   const { setPageLoading } = useApp();
   const [featured, setFeatured] = useState<Guide[]>([]);
-  const [count, setCount] = useState({ published: 0, total: 20 });
   const [loading, setLoading] = useState(true);
   const [onboardingStarted, setOnboardingStarted] = useState(false);
   const [onboardingAnswer, setOnboardingAnswer] = useState<string | null>(null);
@@ -31,11 +30,8 @@ export function HomePage() {
     let cancelled = false;
     (async () => {
       try {
-        const [f, c] = await Promise.all([fetchFeaturedGuides(), fetchGuideCount()]);
-        if (!cancelled) {
-          setFeatured(f);
-          setCount(c);
-        }
+        const f = await fetchFeaturedGuides();
+        if (!cancelled) setFeatured(f);
       } catch {
         // silent
       } finally {
@@ -96,9 +92,6 @@ export function HomePage() {
               <Rocket size={16} className="inline mr-2" />
               {t('nav.opportunities')}
             </Button>
-          </div>
-          <div className="mt-4 text-sm" style={{ color: 'var(--text-secondary)' }}>
-            {count.published} {t('common.guideCount')} ({count.published} of {count.total})
           </div>
         </div>
       </section>

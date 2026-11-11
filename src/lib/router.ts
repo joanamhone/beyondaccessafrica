@@ -22,7 +22,7 @@ function parseHash(hash: string): Route {
   if (clean === 'contact') return { name: 'contact' };
   if (clean === 'admin') return { name: 'admin' };
   if (clean.startsWith('guide/')) {
-    return { name: 'guide', slug: clean.slice(5) };
+    return { name: 'guide', slug: decodeURIComponent(clean.slice('guide/'.length)) };
   }
   return { name: 'home' };
 }
